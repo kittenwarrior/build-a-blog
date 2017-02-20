@@ -57,19 +57,28 @@
     margin: 0;
     font-size: 17px;
   }
+  .blogpost-created{
+    font-style: italic;
+    font-size: 14px;
+  }
 </style>
 
   <body>
-    <h1>Build A Blog</h1>
+    <a href="/blog"><h1>Build A Blog</h1></a>
+
 
     {% block content %}
     {% endblock %}
-
+    <hr>
+    <a href="/newpost">Submit A New Post!</a>
     <hr>
 
     {% for blogpost in blogposts %}
       <div class="blogpost">
-        <div class="blogpost-title">{{blogpost.title}}</div>
+        <div class="blogpost-title">
+          <a href="/blog/{{blogpost.key().id()}}">
+          {{blogpost.title}}</a></div>
+        <div class="blogpost-created">{{blogpost.created}}</div>
         <pre class="blogpost-body">{{blogpost.blogpost}}</pre>
       </div>
     {% endfor %}

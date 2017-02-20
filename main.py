@@ -40,11 +40,11 @@ class Blogpost(db.Model):
     created = db.DateTimeProperty(auto_now_add = True)
 
 class MainPage(Handler):
-    def render_front(self, title="", blogpost="", error=""):
+    def render_front(self, title="", blogpost="", error="", created=""):
         blogposts = db.GqlQuery("SELECT * FROM Blogpost ORDER BY created DESC LIMIT 5")
 
 
-        self.render("front.html", title=title, blogpost=blogpost, error=error, blogposts=blogposts)
+        self.render("front.html", title=title, blogpost=blogpost, error=error, blogposts=blogposts, created="")
 
     def get(self):
         self.render_front()
@@ -63,9 +63,9 @@ class MainPage(Handler):
     #         self.render_front(title, blogpost, error)
 
 class NewPost(Handler):
-    def render_newpost(self, title="", blogpost="", error=""):
+    def render_newpost(self, title="", blogpost="", error="", created=""):
 
-        self.render("newpost.html", title=title, blogpost=blogpost, error=error)
+        self.render("newpost.html", title=title, blogpost=blogpost, error=error, created=created)
 
     def get(self):
         self.render_newpost()
@@ -78,7 +78,7 @@ class NewPost(Handler):
             a = Blogpost(title = title, blogpost = blogpost)
             a.put()
 
-            self.redirect("/blog")
+            self.redirect("/blog/%s" % a.key().id())
         else:
             error = "We need both a title and some content!"
             self.render_newpost(title, blogpost, error)
